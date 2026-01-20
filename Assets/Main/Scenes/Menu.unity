@@ -2420,8 +2420,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 518935902}
+  - component: {fileID: 518935903}
   m_Layer: 0
-  m_Name: Menu
+  m_Name: MenuSwitcher
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2442,6 +2443,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &518935903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 518935901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b294e99853f3c1c429aa79f7094761a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mainMenu: {fileID: 1557773460}
+  _leaderboardButton: {fileID: 1663636998}
+  _settingsButton: {fileID: 725198417}
+  _leaderboard: {fileID: 1238962222}
+  _leaderboardBackButton: {fileID: 453928688}
+  _settings: {fileID: 585234407}
+  _settingsBackButton: {fileID: 1551560558}
 --- !u!1 &547956510
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,7 +2,7 @@ using com.cyborgAssets.inspectorButtonPro;
 using UnityEngine;
 using YG;
 
-public class LangSwitcher : MonoBehaviour
+public class LanguageSwitcher : MonoBehaviour
 {
     [ProButton]
     public void ChangeLanguageOnTurkish()
