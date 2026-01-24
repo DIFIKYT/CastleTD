@@ -1,24 +1,56 @@
-using com.cyborgAssets.inspectorButtonPro;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using YG;
 
 public class LanguageSwitcher : MonoBehaviour
 {
-    [ProButton]
-    public void ChangeLanguageOnTurkish()
+    // [ProButton]
+    // public void ChangeLanguageOnTurkish()
+    // {
+    //     YG2.SwitchLanguage("tr");
+    // }
+
+    // [ProButton]
+    // public void ChangeLanguageOnEnglish()
+    // {
+    //     YG2.SwitchLanguage("en");
+    // }
+
+    // [ProButton]
+    // public void ChangeLanguageOnRussian()
+    // {
+    //     YG2.SwitchLanguage("ru");
+    // }
+
+    [SerializeField] private List<string> _languages;
+    [SerializeField] private Button _button;
+
+    private Queue<string> _languagesQueue;
+
+    private void Awake()
     {
-        YG2.SwitchLanguage("tr");
+        _languagesQueue = new();
+
+        foreach (string language in _languages)
+        {
+            _languagesQueue.Enqueue(language);
+        }
     }
 
-    [ProButton]
-    public void ChangeLanguageOnEnglish()
+    private void OnEnable()
     {
-        YG2.SwitchLanguage("en");
+        _button.onClick.AddListener(Switch);
     }
 
-    [ProButton]
-    public void ChangeLanguageOnRussian()
+    private void OnDisable()
     {
-        YG2.SwitchLanguage("ru");
+        _button.onClick.RemoveListener(Switch);
+    }
+
+    private void Switch()
+    {
+        YG2.SwitchLanguage(_languagesQueue.Peek());
+        _languagesQueue.Enqueue(_languagesQueue.Dequeue());
     }
 }
