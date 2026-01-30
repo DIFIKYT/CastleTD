@@ -1,4 +1,5 @@
 using UnityEngine;
+
 [RequireComponent(typeof(SceneSwitcher))]
 public class Game : MonoBehaviour
 {
@@ -36,7 +37,7 @@ public class Game : MonoBehaviour
             case GameState.MainMenu:
                 _sceneSwitcher.LoadMainMenu();
                 break;
-            case GameState.Gameplay:
+            case GameState.Game:
                 _sceneSwitcher.LoadGame();
                 break;
             case GameState.Pause:

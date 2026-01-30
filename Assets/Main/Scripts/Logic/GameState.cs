@@ -2,7 +2,7 @@ public enum GameState
 {
     None,
     MainMenu,
-    Gameplay,
+    Game,
     Pause,
     GameOver
 }
