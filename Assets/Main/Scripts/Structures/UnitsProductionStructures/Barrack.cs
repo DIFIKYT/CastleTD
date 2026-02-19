@@ -1,0 +1,4 @@
+public class Barrack : AbstractUnitProductionStructure
+{
+
+}
