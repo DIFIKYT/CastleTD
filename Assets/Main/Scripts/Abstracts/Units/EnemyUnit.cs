@@ -1,4 +1,4 @@
-public abstract class EnemyUnity : AbstractUnit
+public abstract class EnemyUnit : AbstractUnit
 {
 
 }
