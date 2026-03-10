@@ -96,6 +96,7 @@ GameObject:
   - component: {fileID: 6694232620983451373}
   - component: {fileID: 7439070855261457694}
   - component: {fileID: 733949453991286992}
+  - component: {fileID: 6135095143197327069}
   m_Layer: 0
   m_Name: GoblinWarrior
   m_TagString: Untagged
@@ -185,7 +186,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _unitStats: {fileID: 11400000, guid: 909fdd401074fcf45ba8dab221a7613c, type: 2}
   _targetDetector: {fileID: 2091210320146122232}
-  _startTarget: {fileID: 0}
+  _health: {fileID: 6135095143197327069}
 --- !u!114 &733949453991286992
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,6 +197,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 94ac16a77ec5b9442aa4a6dcf5e86952, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6135095143197327069
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4079115839564018690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cf9ee1472521d5408ae3a63c17df3d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7475080150017665687

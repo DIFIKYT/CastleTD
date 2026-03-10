@@ -1,7 +1,12 @@
+using UnityEngine;
+
 public class PlayerUnit : Unit
 {
-    protected override bool IsNeedMove()
+    protected override bool IsTargetInAttackRange()
     {
-        throw new System.NotImplementedException();
+        float distance = Vector3.Distance(Transform.position, CurrentTarget.Transform.position);
+
+        return distance < UnitStats.StoppingDistance;
+
     }
 }

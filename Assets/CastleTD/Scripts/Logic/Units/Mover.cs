@@ -5,12 +5,10 @@ public class Mover : MonoBehaviour
     private float _moveSpeed;
     private float _rotateSpeed;
 
-    private Transform _currentTarget;
-    private Transform _transform;
+    private Transform _target;
 
-    public void Initialize(Transform transform, float moveSpeed, float rotateSpeed)
+    public void Initialize(float moveSpeed, float rotateSpeed)
     {
-        _transform = transform;
         _moveSpeed = moveSpeed;
         _rotateSpeed = rotateSpeed;
     }
@@ -23,17 +21,17 @@ public class Mover : MonoBehaviour
 
     public void ChangeTarget(Transform target)
     {
-        _currentTarget = target;
+        _target = target;
     }
 
     private void Move()
     {
-        Vector3 currentPosition = _transform.position;
-        Vector3 targetPosition = _currentTarget.position;
+        Vector3 currentPosition = transform.position;
+        Vector3 targetPosition = _target.position;
 
-        targetPosition.y = _transform.position.y;
+        targetPosition.y = transform.position.y;
 
-        _transform.position = Vector3.MoveTowards(
+        transform.position = Vector3.MoveTowards(
             currentPosition,
             targetPosition,
             _moveSpeed * Time.deltaTime);
@@ -41,7 +39,7 @@ public class Mover : MonoBehaviour
 
     private void Rotate()
     {
-        Vector3 direction = (_currentTarget.position - _transform.position).normalized;
+        Vector3 direction = (_target.position - transform.position).normalized;
         direction.y = 0f;
 
         if (direction.sqrMagnitude < 0.001f)
@@ -49,8 +47,8 @@ public class Mover : MonoBehaviour
 
         Quaternion targetRotation = Quaternion.LookRotation(direction);
 
-        _transform.rotation = Quaternion.RotateTowards(
-            _transform.rotation,
+        transform.rotation = Quaternion.RotateTowards(
+            transform.rotation,
             targetRotation,
             _rotateSpeed * Time.deltaTime);
     }

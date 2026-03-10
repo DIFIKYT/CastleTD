@@ -1,40 +1,52 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Mover))]
+[RequireComponent(typeof(Health))]
+[RequireComponent(typeof(AttackBehaviour))]
 public abstract class Unit : MonoBehaviour
 {
     [SerializeField] private UnitStats _unitStats;
     [SerializeField] private TargetDetector _targetDetector;
-    [SerializeField] private AttackBehaviour _attackBehaviour;
-    [SerializeField] private Health _health;
-    [SerializeField] private Transform _startTarget;
+    [SerializeField] private Transform _startTargetTransform;
 
+    private AttackBehaviour _attackBehaviour;
+    private Health _health;
     private Mover _mover;
-    private Transform _transform;
-    private Transform _currentTarget;
+    private IDamageable _startTarget;
+    private IDamageable _currentTarget;
     private bool _isFighting;
 
     protected UnitStats UnitStats => _unitStats;
-    protected Transform Transform => _transform;
-    protected Transform CurrentTarget => _currentTarget;
+    protected Transform Transform => transform;
+    protected IDamageable CurrentTarget => _currentTarget;
 
     private void Awake()
     {
-        _mover = GetComponent<Mover>();
+        _startTarget = _startTargetTransform.GetComponent<IDamageable>();
         _currentTarget = _startTarget;
-        _transform = transform;
-        _mover.ChangeTarget(_currentTarget);
-        _mover.Initialize(_transform, _unitStats.MoveSpeed, _unitStats.RotateSpeed);
+
+        _mover = GetComponent<Mover>();
+        _mover.Initialize(_unitStats.MoveSpeed, _unitStats.RotateSpeed);
+        _mover.ChangeTarget(_currentTarget.Transform);
+
+        _attackBehaviour = GetComponent<AttackBehaviour>();
+        _attackBehaviour.Initialize(_unitStats.DamageValue);
+        _attackBehaviour.ChangeTarget(_currentTarget);
+
+        _health = GetComponent<Health>();
+        _health.Initialize(_unitStats.MaxHitPoints);
     }
 
     private void OnEnable()
     {
         _targetDetector.UnitDetected += OnUnitDetected;
+        _health.HitPointsOver += OnHitPointsOver;
     }
 
     private void OnDisable()
     {
         _targetDetector.UnitDetected -= OnUnitDetected;
+        _health.HitPointsOver -= OnHitPointsOver;
     }
 
     private void Update()
@@ -42,18 +54,33 @@ public abstract class Unit : MonoBehaviour
         if (_currentTarget == null)
             return;
 
-        if (IsNeedMove())
+        if (IsTargetInAttackRange())
+        {
+            _isFighting = true;
+            AttackTarget();
+        }
+        else
         {
             MoveToTarget();
         }
     }
 
-    private void OnUnitDetected(Unit unit)
+    private void OnUnitDetected(IDamageable damageable)
     {
         if (_isFighting)
             return;
 
-        SwitchTarget(unit.gameObject.transform);
+        ChangeTargetToNew(damageable);
+    }
+
+    public void OnHitPointsOver()
+    {
+        Destroy(gameObject);
+    }
+
+    public void OnTargetHitPointsOver()
+    {
+        ChangeTargetToStart();
     }
 
     private void MoveToTarget()
@@ -61,12 +88,28 @@ public abstract class Unit : MonoBehaviour
         _mover.MoveToTarget();
     }
 
-    private void SwitchTarget(Transform newTarget)
+    private void AttackTarget()
     {
-        _currentTarget = newTarget;
-        _mover.ChangeTarget(newTarget);
-        _isFighting = true;
+        _attackBehaviour.Attack();
     }
 
-    protected abstract bool IsNeedMove();
+    private void ChangeTargetToNew(IDamageable newTarget)
+    {
+        _currentTarget = newTarget;
+        _mover.ChangeTarget(_currentTarget.Transform);
+        _attackBehaviour.ChangeTarget(_currentTarget);
+
+        _currentTarget.HitPointsOver += OnTargetHitPointsOver;
+    }
+
+    private void ChangeTargetToStart()
+    {
+        _currentTarget = _startTarget;
+        _mover.ChangeTarget(_currentTarget.Transform);
+        _attackBehaviour.ChangeTarget(_currentTarget);
+
+        _currentTarget.HitPointsOver -= OnTargetHitPointsOver;
+    }
+
+    protected abstract bool IsTargetInAttackRange();
 }

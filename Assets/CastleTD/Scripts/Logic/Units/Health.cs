@@ -1,14 +1,16 @@
 using System;
 using UnityEngine;
 
-public class Health : MonoBehaviour
+public class Health : MonoBehaviour, IDamageable
 {
     private int _maxHitPoints;
     private int _currentHitPoints;
+    private Transform _transform;
 
     public event Action HitPointsOver;
 
     public int CurrentHitPoints => _currentHitPoints;
+    public Transform Transform => transform;
 
     public void Initialize(int maxHitPoints)
     {
@@ -16,7 +18,7 @@ public class Health : MonoBehaviour
         _currentHitPoints = _maxHitPoints;
     }
 
-    public void DeacreaseHitPoints(int value)
+    public void TakeDamage(int value)
     {
         if (_currentHitPoints - value <= 0)
         {
@@ -26,16 +28,5 @@ public class Health : MonoBehaviour
         }
 
         _currentHitPoints -= value;
-    }
-
-    public void InreaseHitPoints(int value)
-    {
-        if (_currentHitPoints + value >= _maxHitPoints)
-        {
-            _currentHitPoints = _maxHitPoints;
-            return;
-        }
-
-        _currentHitPoints += value;
     }
 }

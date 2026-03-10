@@ -3,13 +3,13 @@ using UnityEngine;
 
 public class TargetDetector : MonoBehaviour
 {
-    public event Action<Unit> UnitDetected;
+    public event Action<IDamageable> UnitDetected;
 
     private void OnTriggerEnter(Collider collider)
     {
-        if (collider.TryGetComponent(out Unit unit))
+        if (collider.TryGetComponent(out IDamageable damageable))
         {
-            UnitDetected?.Invoke(unit);
+            UnitDetected?.Invoke(damageable);
         }
     }
 }
