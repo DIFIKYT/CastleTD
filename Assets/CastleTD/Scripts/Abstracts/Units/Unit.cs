@@ -4,11 +4,12 @@ using UnityEngine;
 [RequireComponent(typeof(Mover))]
 [RequireComponent(typeof(Health))]
 [RequireComponent(typeof(AttackBehaviour))]
-public abstract class Unit : MonoBehaviour
+public abstract class Unit : MonoBehaviour, IFactionMember
 {
     [SerializeField] private UnitStats _unitStats;
     [SerializeField] private TargetDetector _targetDetector;
     [SerializeField] private Transform _startMoveTarget;
+    [SerializeField] private Faction _faction;
 
     private AttackBehaviour _attackBehaviour;
     private Health _health;
@@ -19,6 +20,7 @@ public abstract class Unit : MonoBehaviour
     private UnitState _state;
     private Coroutine _attackCoroutine;
 
+    public Faction Faction => _faction;
     protected UnitStats UnitStats => _unitStats;
     protected Transform CurrentMoveTarget => _currentMoveTarget;
 
@@ -79,10 +81,25 @@ public abstract class Unit : MonoBehaviour
 
     private void OnTargetDetected(Transform moveTarget, IDamageable attackTarget)
     {
-        if (_state == UnitState.Fighting || _currentMoveTarget != _startMoveTarget)
+        if (CanChangeTarget() == false)
             return;
 
-        ChangeTargetToNew(moveTarget, attackTarget);
+        if (moveTarget.TryGetComponent(out IFactionMember factionMember))
+            if (factionMember.Faction == _faction)
+                return;
+
+        ChangeTarget(moveTarget, attackTarget);
+    }
+
+    private bool CanChangeTarget()
+    {
+        if (_state == UnitState.Fighting)
+            return false;
+
+        if (_state == UnitState.Moving && _currentMoveTarget != _startMoveTarget)
+            return false;
+
+        return true;
     }
 
     private void OnHitPointsOver()
@@ -92,10 +109,10 @@ public abstract class Unit : MonoBehaviour
 
     private void OnTargetHitPointsOver()
     {
-        ChangeTargetToNew(_startMoveTarget, _startAttackTarget);
+        ChangeTarget(_startMoveTarget, _startAttackTarget);
     }
 
-    private void ChangeTargetToNew(Transform moveTarget, IDamageable attackTarget)
+    private void ChangeTarget(Transform moveTarget, IDamageable attackTarget)
     {
         _currentAttackTarget.HitPointsOver -= OnTargetHitPointsOver;
 
@@ -111,5 +128,11 @@ public abstract class Unit : MonoBehaviour
         _currentAttackTarget.HitPointsOver += OnTargetHitPointsOver;
     }
 
-    protected abstract bool IsTargetInAttackRange();
+    private bool IsTargetInAttackRange()
+    {
+        float distance = (transform.position - _currentMoveTarget.position).sqrMagnitude;
+        float range = _unitStats.StoppingDistance * _unitStats.StoppingDistance;
+
+        return distance < range;
+    }
 }

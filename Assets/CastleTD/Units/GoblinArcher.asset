@@ -17,5 +17,5 @@ MonoBehaviour:
   _rotateSpeed: 50
   _maxHitPoints: 100
   _damageValue: 20
-  _attackInterval: 2
-  _stoppingDistance: 1.5
+  _attackInterval: 4
+  _stoppingDistance: 5

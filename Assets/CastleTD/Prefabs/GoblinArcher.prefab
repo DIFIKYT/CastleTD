@@ -254,6 +254,7 @@ MonoBehaviour:
   _unitStats: {fileID: 11400000, guid: 86f0bb481cdc80f4babd792a337b9f6e, type: 2}
   _targetDetector: {fileID: 4785720871728958368}
   _startMoveTarget: {fileID: 0}
+  _faction: 1
 --- !u!114 &733949453991286992
 MonoBehaviour:
   m_ObjectHideFlags: 0

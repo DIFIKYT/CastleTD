@@ -1,11 +1,14 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Health))]
-public class Gates : MonoBehaviour
+public class Gates : MonoBehaviour, IFactionMember
 {
     [SerializeField] private int _maxHitPoints;
+    [SerializeField] private Faction _faction;
 
     private Health _health;
+
+    public Faction Faction => _faction;
 
     private void Awake()
     {
