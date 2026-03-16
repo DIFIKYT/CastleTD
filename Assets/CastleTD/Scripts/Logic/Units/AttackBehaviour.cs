@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class AttackBehaviour : MonoBehaviour
@@ -6,9 +7,10 @@ public class AttackBehaviour : MonoBehaviour
     private float _attackInterval;
     private IDamageable _target;
 
-    public void Initialize(int damageValue)
+    public void Initialize(int damageValue, float attackInterval)
     {
         _damageValue = damageValue;
+        _attackInterval = attackInterval;
     }
 
     public void ChangeTarget(IDamageable target)
@@ -16,8 +18,14 @@ public class AttackBehaviour : MonoBehaviour
         _target = target;
     }
 
-    public void Attack()
+    public IEnumerator DamageCoroutine()
     {
-        _target.TakeDamage(_damageValue);
+        WaitForSeconds delay = new(_attackInterval);
+
+        do
+        {
+            _target.TakeDamage(_damageValue);
+            yield return delay;
+        } while (_target.CurrentHitPoints > 0);
     }
 }

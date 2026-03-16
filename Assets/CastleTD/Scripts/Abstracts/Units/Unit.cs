@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Mover))]
@@ -7,108 +8,107 @@ public abstract class Unit : MonoBehaviour
 {
     [SerializeField] private UnitStats _unitStats;
     [SerializeField] private TargetDetector _targetDetector;
-    [SerializeField] private Transform _startTargetTransform;
+    [SerializeField] private Transform _startMoveTarget;
 
     private AttackBehaviour _attackBehaviour;
     private Health _health;
     private Mover _mover;
-    private IDamageable _startTarget;
-    private IDamageable _currentTarget;
-    private bool _isFighting;
+    private IDamageable _startAttackTarget;
+    private Transform _currentMoveTarget;
+    private IDamageable _currentAttackTarget;
+    private UnitState _state;
+    private Coroutine _attackCoroutine;
 
     protected UnitStats UnitStats => _unitStats;
-    protected Transform Transform => transform;
-    protected IDamageable CurrentTarget => _currentTarget;
+    protected Transform CurrentMoveTarget => _currentMoveTarget;
 
     private void Awake()
     {
-        _startTarget = _startTargetTransform.GetComponent<IDamageable>();
-        _currentTarget = _startTarget;
+        if (_startMoveTarget.TryGetComponent(out IDamageable damageable) == false)
+        {
+            throw new NullReferenceException($"{_startMoveTarget} does not contain IDamageable");
+        }
+
+        _startAttackTarget = damageable;
+        _currentMoveTarget = _startMoveTarget;
+        _currentAttackTarget = _startAttackTarget;
 
         _mover = GetComponent<Mover>();
         _mover.Initialize(_unitStats.MoveSpeed, _unitStats.RotateSpeed);
-        _mover.ChangeTarget(_currentTarget.Transform);
+        _mover.ChangeTarget(_currentMoveTarget);
 
         _attackBehaviour = GetComponent<AttackBehaviour>();
-        _attackBehaviour.Initialize(_unitStats.DamageValue);
-        _attackBehaviour.ChangeTarget(_currentTarget);
+        _attackBehaviour.Initialize(_unitStats.DamageValue, _unitStats.AttackInterval);
+        _attackBehaviour.ChangeTarget(_currentAttackTarget);
 
         _health = GetComponent<Health>();
         _health.Initialize(_unitStats.MaxHitPoints);
+
+        _state = UnitState.Moving;
     }
 
     private void OnEnable()
     {
-        _targetDetector.UnitDetected += OnUnitDetected;
+        _targetDetector.TargetDetected += OnTargetDetected;
         _health.HitPointsOver += OnHitPointsOver;
     }
 
     private void OnDisable()
     {
-        _targetDetector.UnitDetected -= OnUnitDetected;
+        _targetDetector.TargetDetected -= OnTargetDetected;
         _health.HitPointsOver -= OnHitPointsOver;
     }
 
     private void Update()
     {
-        if (_currentTarget == null)
+        if (_currentMoveTarget == null)
+            return;
+
+        if (_state == UnitState.Fighting)
             return;
 
         if (IsTargetInAttackRange())
         {
-            _isFighting = true;
-            AttackTarget();
+            _state = UnitState.Fighting;
+            _attackCoroutine = StartCoroutine(_attackBehaviour.DamageCoroutine());
+            return;
         }
-        else
-        {
-            MoveToTarget();
-        }
+
+        _mover.MoveToTarget();
     }
 
-    private void OnUnitDetected(IDamageable damageable)
+    private void OnTargetDetected(Transform moveTarget, IDamageable attackTarget)
     {
-        if (_isFighting)
+        if (_state == UnitState.Fighting || _currentMoveTarget != _startMoveTarget)
             return;
 
-        ChangeTargetToNew(damageable);
+        ChangeTargetToNew(moveTarget, attackTarget);
     }
 
-    public void OnHitPointsOver()
+    private void OnHitPointsOver()
     {
         Destroy(gameObject);
     }
 
-    public void OnTargetHitPointsOver()
+    private void OnTargetHitPointsOver()
     {
-        ChangeTargetToStart();
+        ChangeTargetToNew(_startMoveTarget, _startAttackTarget);
     }
 
-    private void MoveToTarget()
+    private void ChangeTargetToNew(Transform moveTarget, IDamageable attackTarget)
     {
-        _mover.MoveToTarget();
-    }
+        _currentAttackTarget.HitPointsOver -= OnTargetHitPointsOver;
 
-    private void AttackTarget()
-    {
-        _attackBehaviour.Attack();
-    }
+        if (_attackCoroutine != null)
+            StopCoroutine(_attackCoroutine);
 
-    private void ChangeTargetToNew(IDamageable newTarget)
-    {
-        _currentTarget = newTarget;
-        _mover.ChangeTarget(_currentTarget.Transform);
-        _attackBehaviour.ChangeTarget(_currentTarget);
+        _currentMoveTarget = moveTarget;
+        _currentAttackTarget = attackTarget;
+        _state = UnitState.Moving;
+        _mover.ChangeTarget(_currentMoveTarget);
+        _attackBehaviour.ChangeTarget(_currentAttackTarget);
 
-        _currentTarget.HitPointsOver += OnTargetHitPointsOver;
-    }
-
-    private void ChangeTargetToStart()
-    {
-        _currentTarget = _startTarget;
-        _mover.ChangeTarget(_currentTarget.Transform);
-        _attackBehaviour.ChangeTarget(_currentTarget);
-
-        _currentTarget.HitPointsOver -= OnTargetHitPointsOver;
+        _currentAttackTarget.HitPointsOver += OnTargetHitPointsOver;
     }
 
     protected abstract bool IsTargetInAttackRange();

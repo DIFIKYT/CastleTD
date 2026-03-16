@@ -5,7 +5,6 @@ public class Health : MonoBehaviour, IDamageable
 {
     private int _maxHitPoints;
     private int _currentHitPoints;
-    private Transform _transform;
 
     public event Action HitPointsOver;
 

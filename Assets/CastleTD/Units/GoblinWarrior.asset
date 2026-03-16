@@ -15,6 +15,7 @@ MonoBehaviour:
   _name: Gbolin warrior
   _moveSpeed: 2
   _rotateSpeed: 50
-  _healthPoints: 50
-  _damageValue: 0
+  _maxHitPoints: 100
+  _damageValue: 20
+  _attackInterval: 2
   _stoppingDistance: 1.5

@@ -8,6 +8,7 @@ public class UnitStats : ScriptableObject
     [SerializeField] private float _rotateSpeed;
     [SerializeField] private int _maxHitPoints;
     [SerializeField] private int _damageValue;
+    [SerializeField] private float _attackInterval;
     [SerializeField] private float _stoppingDistance;
 
     public string Name => _name;
@@ -15,5 +16,6 @@ public class UnitStats : ScriptableObject
     public float RotateSpeed => _rotateSpeed;
     public int MaxHitPoints => _maxHitPoints;
     public int DamageValue => _damageValue;
+    public float AttackInterval => _attackInterval;
     public float StoppingDistance => _stoppingDistance;
 }
