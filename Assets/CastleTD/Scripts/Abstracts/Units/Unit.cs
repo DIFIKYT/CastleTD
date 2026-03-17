@@ -28,7 +28,7 @@ public abstract class Unit : MonoBehaviour, IFactionMember
     {
         if (_startMoveTarget.TryGetComponent(out IDamageable damageable) == false)
         {
-            throw new NullReferenceException($"{_startMoveTarget} does not contain IDamageable");
+            throw new NullReferenceException($"{gameObject.name}: {_startMoveTarget.gameObject.name} does not contain IDamageable");
         }
 
         _startAttackTarget = damageable;
