@@ -1,8 +1,25 @@
 using UnityEngine;
 
-public abstract class Spawner : MonoBehaviour
+public abstract class Spawner<T> : MonoBehaviour where T : MonoBehaviour, ISpawnable
 {
-    [SerializeField] private ISpawnable _spawnable;
+    [SerializeField] private T _prefab;
+    [SerializeField] private int _startObjectsCount;
 
-    public abstract void Spawn();
+    protected ObjectPool<T> _pool;
+
+    protected virtual void Awake()
+    {
+        _pool = new(_prefab, transform, _startObjectsCount);
+    }
+
+    public virtual T Spawn()
+    {
+        T item = _pool.Get();
+        return item;
+    }
+
+    public virtual void Despawn(T item)
+    {
+        _pool.Release(item);
+    }
 }
