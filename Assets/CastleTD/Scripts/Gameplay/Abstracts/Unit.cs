@@ -4,13 +4,13 @@ using UnityEngine;
 [RequireComponent(typeof(Mover))]
 [RequireComponent(typeof(Health))]
 [RequireComponent(typeof(AttackBehaviour))]
-public abstract class Unit : MonoBehaviour, IFactionMember, ISpawnable
+public class Unit : MonoBehaviour, IFactionMember, ISpawnable
 {
-    [SerializeField] private UnitStats _unitStats;
     [SerializeField] private TargetDetector _targetDetector;
-    [SerializeField] private Transform _startMoveTarget;
-    [SerializeField] private Faction _faction;
 
+    private UnitStats _unitStats;
+    private Transform _startMoveTarget;
+    private Faction _faction;
     private AttackBehaviour _attackBehaviour;
     private Health _health;
     private Mover _mover;
@@ -36,37 +36,40 @@ public abstract class Unit : MonoBehaviour, IFactionMember, ISpawnable
         _currentAttackTarget = _startAttackTarget;
 
         _mover = GetComponent<Mover>();
-        _mover.Initialize(_unitStats.MoveSpeed, _unitStats.RotateSpeed);
-        _mover.ChangeTarget(_currentMoveTarget);
-
         _attackBehaviour = GetComponent<AttackBehaviour>();
-        _attackBehaviour.Initialize(_unitStats.DamageValue, _unitStats.AttackInterval);
-        _attackBehaviour.ChangeTarget(_currentAttackTarget);
-
         _health = GetComponent<Health>();
+    }
+
+    public void Initialize(UnitStats unitStats, Transform moveTarget, IDamageable attackTarget)
+    {
+        _mover.Initialize(_unitStats.MoveSpeed, _unitStats.RotateSpeed);
+        _attackBehaviour.Initialize(_unitStats.DamageValue, _unitStats.AttackInterval);
         _health.Initialize(_unitStats.MaxHitPoints);
 
-        _state = UnitState.Moving;
+        _mover.ChangeTarget(_currentMoveTarget);
+        _attackBehaviour.ChangeTarget(_currentAttackTarget);
+
+        _currentMoveTarget = _startMoveTarget;
+        _currentAttackTarget = _startAttackTarget;
     }
 
     public void OnSpawn()
+    {
+        _mover.ChangeTarget(_currentMoveTarget);
+        _attackBehaviour.ChangeTarget(_currentAttackTarget);
+
+        _state = UnitState.Moving;
+
+        _targetDetector.TargetDetected += OnTargetDetected;
+        _health.HitPointsOver += OnHitPointsOver;
+    }
+
+    public void OnDespawn()
     {
         _mover.Reset();
         _attackBehaviour.Reset();
         _health.Reset();
 
-        _targetDetector.TargetDetected += OnTargetDetected;
-        _health.HitPointsOver += OnHitPointsOver;
-
-        _currentMoveTarget = _startMoveTarget;
-        _currentAttackTarget = _startAttackTarget;
-
-        _mover.ChangeTarget(_currentMoveTarget);
-        _attackBehaviour.ChangeTarget(_currentAttackTarget);
-    }
-
-    public void OnDespawn()
-    {
         _targetDetector.TargetDetected -= OnTargetDetected;
         _health.HitPointsOver -= OnHitPointsOver;
     }

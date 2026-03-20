@@ -12,14 +12,15 @@ public abstract class Spawner<T> : MonoBehaviour where T : MonoBehaviour, ISpawn
         _pool = new(_prefab, transform, _startObjectsCount);
     }
 
-    public virtual T Spawn()
+    protected T Spawn(Vector3 position)
     {
         T item = _pool.Get();
+        item.transform.position = position;
         item.OnSpawn();
         return item;
     }
 
-    public virtual void Despawn(T item)
+    protected void Despawn(T item)
     {
         item.OnDespawn();
         _pool.Release(item);

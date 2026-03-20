@@ -160,7 +160,7 @@ GameObject:
   - component: {fileID: 9083736842146688533}
   - component: {fileID: 1211021934959794452}
   - component: {fileID: 6694232620983451373}
-  - component: {fileID: 2323850067003141138}
+  - component: {fileID: 316825705357583042}
   - component: {fileID: 3861776215995278263}
   - component: {fileID: 7147887701343590894}
   - component: {fileID: 5702638686124010275}
@@ -239,7 +239,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
---- !u!114 &2323850067003141138
+--- !u!114 &316825705357583042
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -248,12 +248,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 4079115839564018690}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84ed0e55a3036ce47a629430a18b8581, type: 3}
+  m_Script: {fileID: 11500000, guid: 4aee973867a1c10468b080c1c8b11916, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _unitStats: {fileID: 11400000, guid: 53548498917604446ba5f778b4b9b844, type: 2}
   _targetDetector: {fileID: 29738305687038154}
-  _startTarget: {fileID: 0}
+  _startMoveTarget: {fileID: 0}
+  _faction: 0
 --- !u!114 &3861776215995278263
 MonoBehaviour:
   m_ObjectHideFlags: 0
