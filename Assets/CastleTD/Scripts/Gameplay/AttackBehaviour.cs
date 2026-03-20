@@ -13,6 +13,11 @@ public class AttackBehaviour : MonoBehaviour
         _attackInterval = attackInterval;
     }
 
+    public void Reset()
+    {
+        _target = null;
+    }
+
     public void ChangeTarget(IDamageable target)
     {
         _target = target;

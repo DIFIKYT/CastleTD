@@ -17,6 +17,11 @@ public class Health : MonoBehaviour, IDamageable
         _currentHitPoints = _maxHitPoints;
     }
 
+    public void Reset()
+    {
+        _currentHitPoints = _maxHitPoints;
+    }
+
     public void TakeDamage(int value)
     {
         if (_currentHitPoints - value <= 0)

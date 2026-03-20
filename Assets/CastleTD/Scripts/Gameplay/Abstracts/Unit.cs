@@ -4,7 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(Mover))]
 [RequireComponent(typeof(Health))]
 [RequireComponent(typeof(AttackBehaviour))]
-public abstract class Unit : MonoBehaviour, IFactionMember
+public abstract class Unit : MonoBehaviour, IFactionMember, ISpawnable
 {
     [SerializeField] private UnitStats _unitStats;
     [SerializeField] private TargetDetector _targetDetector;
@@ -20,9 +20,9 @@ public abstract class Unit : MonoBehaviour, IFactionMember
     private UnitState _state;
     private Coroutine _attackCoroutine;
 
+    public event Action<Unit> Died;
+
     public Faction Faction => _faction;
-    protected UnitStats UnitStats => _unitStats;
-    protected Transform CurrentMoveTarget => _currentMoveTarget;
 
     private void Awake()
     {
@@ -49,13 +49,23 @@ public abstract class Unit : MonoBehaviour, IFactionMember
         _state = UnitState.Moving;
     }
 
-    private void OnEnable()
+    public void OnSpawn()
     {
+        _mover.Reset();
+        _attackBehaviour.Reset();
+        _health.Reset();
+
         _targetDetector.TargetDetected += OnTargetDetected;
         _health.HitPointsOver += OnHitPointsOver;
+
+        _currentMoveTarget = _startMoveTarget;
+        _currentAttackTarget = _startAttackTarget;
+
+        _mover.ChangeTarget(_currentMoveTarget);
+        _attackBehaviour.ChangeTarget(_currentAttackTarget);
     }
 
-    private void OnDisable()
+    public void OnDespawn()
     {
         _targetDetector.TargetDetected -= OnTargetDetected;
         _health.HitPointsOver -= OnHitPointsOver;
@@ -104,7 +114,7 @@ public abstract class Unit : MonoBehaviour, IFactionMember
 
     private void OnHitPointsOver()
     {
-        Destroy(gameObject);
+        Died?.Invoke(this);
     }
 
     private void OnTargetHitPointsOver()

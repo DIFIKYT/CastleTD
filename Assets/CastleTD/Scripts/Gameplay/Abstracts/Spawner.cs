@@ -15,11 +15,13 @@ public abstract class Spawner<T> : MonoBehaviour where T : MonoBehaviour, ISpawn
     public virtual T Spawn()
     {
         T item = _pool.Get();
+        item.OnSpawn();
         return item;
     }
 
     public virtual void Despawn(T item)
     {
+        item.OnDespawn();
         _pool.Release(item);
     }
 }

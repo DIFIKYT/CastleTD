@@ -13,6 +13,11 @@ public class Mover : MonoBehaviour
         _rotateSpeed = rotateSpeed;
     }
 
+    public void Reset()
+    {
+        _target = null;
+    }
+
     public void MoveToTarget()
     {
         Move();
