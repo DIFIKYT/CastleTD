@@ -9,13 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77b70f19aa271d646b54f04b29499558, type: 3}
+  m_Script: {fileID: 11500000, guid: fa89ed8cf97e4234f8dcdce28a590f9e, type: 3}
   m_Name: GoblinWarrior
   m_EditorClassIdentifier: 
-  _name: Gbolin warrior
-  _moveSpeed: 2
-  _rotateSpeed: 50
-  _maxHitPoints: 100
-  _damageValue: 20
-  _attackInterval: 2
-  _stoppingDistance: 1.5
+  _prefab: {fileID: 4431756562066244868, guid: abe3e92e5680a0a4d9215aa3305dfb89, type: 3}
+  _stats: {fileID: 11400000, guid: 53548498917604446ba5f778b4b9b844, type: 2}

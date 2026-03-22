@@ -8,12 +8,12 @@ public class Unit : MonoBehaviour, IFactionMember, ISpawnable
 {
     [SerializeField] private TargetDetector _targetDetector;
 
-    private UnitStats _unitStats;
-    private Transform _startMoveTarget;
+    private UnitStats _stats;
     private Faction _faction;
     private AttackBehaviour _attackBehaviour;
     private Health _health;
     private Mover _mover;
+    private Transform _startMoveTarget;
     private IDamageable _startAttackTarget;
     private Transform _currentMoveTarget;
     private IDamageable _currentAttackTarget;
@@ -23,40 +23,32 @@ public class Unit : MonoBehaviour, IFactionMember, ISpawnable
     public event Action<Unit> Died;
 
     public Faction Faction => _faction;
+    public Unit Prefab { get; private set; }
 
     private void Awake()
     {
-        if (_startMoveTarget.TryGetComponent(out IDamageable damageable) == false)
-        {
-            throw new NullReferenceException($"{gameObject.name}: {_startMoveTarget.gameObject.name} does not contain IDamageable");
-        }
-
-        _startAttackTarget = damageable;
-        _currentMoveTarget = _startMoveTarget;
-        _currentAttackTarget = _startAttackTarget;
-
         _mover = GetComponent<Mover>();
         _attackBehaviour = GetComponent<AttackBehaviour>();
         _health = GetComponent<Health>();
     }
 
-    public void Initialize(UnitStats unitStats, Transform moveTarget, IDamageable attackTarget)
+    public void Initialize(Unit prefab, UnitStats stats, Faction faction, Transform startMoveTarget, IDamageable startAttackTarget)
     {
-        _mover.Initialize(_unitStats.MoveSpeed, _unitStats.RotateSpeed);
-        _attackBehaviour.Initialize(_unitStats.DamageValue, _unitStats.AttackInterval);
-        _health.Initialize(_unitStats.MaxHitPoints);
+        _stats = stats;
+        _faction = faction;
+        Prefab = prefab;
 
-        _mover.ChangeTarget(_currentMoveTarget);
-        _attackBehaviour.ChangeTarget(_currentAttackTarget);
+        _mover.Initialize(_stats.MoveSpeed, _stats.RotateSpeed);
+        _attackBehaviour.Initialize(_stats.DamageValue, _stats.AttackInterval);
+        _health.Initialize(_stats.MaxHitPoints);
 
-        _currentMoveTarget = _startMoveTarget;
-        _currentAttackTarget = _startAttackTarget;
+        _startMoveTarget = startMoveTarget;
+        _startAttackTarget = startAttackTarget;
     }
 
     public void OnSpawn()
     {
-        _mover.ChangeTarget(_currentMoveTarget);
-        _attackBehaviour.ChangeTarget(_currentAttackTarget);
+        ChangeTarget(_startMoveTarget, _startAttackTarget);
 
         _state = UnitState.Moving;
 
@@ -127,7 +119,10 @@ public class Unit : MonoBehaviour, IFactionMember, ISpawnable
 
     private void ChangeTarget(Transform moveTarget, IDamageable attackTarget)
     {
-        _currentAttackTarget.HitPointsOver -= OnTargetHitPointsOver;
+        if (_currentAttackTarget != null)
+        {
+            _currentAttackTarget.HitPointsOver -= OnTargetHitPointsOver;
+        }
 
         if (_attackCoroutine != null)
             StopCoroutine(_attackCoroutine);
@@ -136,15 +131,18 @@ public class Unit : MonoBehaviour, IFactionMember, ISpawnable
         _currentAttackTarget = attackTarget;
         _state = UnitState.Moving;
         _mover.ChangeTarget(_currentMoveTarget);
-        _attackBehaviour.ChangeTarget(_currentAttackTarget);
 
-        _currentAttackTarget.HitPointsOver += OnTargetHitPointsOver;
+        if (_currentAttackTarget != null)
+        {
+            _attackBehaviour.ChangeTarget(_currentAttackTarget);
+            _currentAttackTarget.HitPointsOver += OnTargetHitPointsOver;
+        }
     }
 
     private bool IsTargetInAttackRange()
     {
         float distance = (transform.position - _currentMoveTarget.position).sqrMagnitude;
-        float range = _unitStats.StoppingDistance * _unitStats.StoppingDistance;
+        float range = _stats.StoppingDistance * _stats.StoppingDistance;
 
         return distance < range;
     }

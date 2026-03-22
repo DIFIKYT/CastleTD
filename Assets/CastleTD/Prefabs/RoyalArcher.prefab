@@ -251,10 +251,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4aee973867a1c10468b080c1c8b11916, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _unitStats: {fileID: 11400000, guid: 114d92c4ae9daee4c979c53ca7179377, type: 2}
   _targetDetector: {fileID: 29738305687038154}
-  _startMoveTarget: {fileID: 0}
-  _faction: 0
 --- !u!114 &3861776215995278263
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -353,7 +350,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0dc8b81455a758543b02a0447b2a360c, type: 2}
+  - {fileID: 2100000, guid: 09e4303493eaf2640a9bdf812693ab2f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

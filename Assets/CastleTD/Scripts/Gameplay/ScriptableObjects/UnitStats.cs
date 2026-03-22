@@ -1,9 +1,8 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New unit", menuName = "Unit/Create new unit", order = 51)]
+[CreateAssetMenu(fileName = "New unit", menuName = "Unit/Create new unit")]
 public class UnitStats : ScriptableObject
 {
-    [SerializeField] private string _name;
     [SerializeField] private float _moveSpeed;
     [SerializeField] private float _rotateSpeed;
     [SerializeField] private int _maxHitPoints;
@@ -11,7 +10,6 @@ public class UnitStats : ScriptableObject
     [SerializeField] private float _attackInterval;
     [SerializeField] private float _stoppingDistance;
 
-    public string Name => _name;
     public float MoveSpeed => _moveSpeed;
     public float RotateSpeed => _rotateSpeed;
     public int MaxHitPoints => _maxHitPoints;

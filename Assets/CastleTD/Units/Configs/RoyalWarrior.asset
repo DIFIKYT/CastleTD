@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa89ed8cf97e4234f8dcdce28a590f9e, type: 3}
+  m_Name: RoyalWarrior
+  m_EditorClassIdentifier: 
+  _prefab: {fileID: 316825705357583042, guid: 1596d0b4c75347247b057b58eee02e37, type: 3}
+  _stats: {fileID: 11400000, guid: 53548498917604446ba5f778b4b9b844, type: 2}
