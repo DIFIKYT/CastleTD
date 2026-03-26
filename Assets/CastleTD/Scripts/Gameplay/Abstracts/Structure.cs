@@ -7,6 +7,21 @@ public abstract class Structure : MonoBehaviour
 
     private Coroutine _processCoroutine;
 
+    public void StartProcess()
+    {
+        if (_processCoroutine != null)
+            return;
+
+        _processCoroutine = StartCoroutine(Process());
+    }
+
+    public void StopProcess()
+    {
+        StopCoroutine(_processCoroutine);
+
+        _processCoroutine = null;
+    }
+
     protected IEnumerator Process()
     {
         yield return new WaitForSeconds(_processTime);
@@ -14,14 +29,6 @@ public abstract class Structure : MonoBehaviour
         OnProcessComplete();
 
         _processCoroutine = null;
-    }
-
-    protected void StartProcess()
-    {
-        if (_processCoroutine != null)
-            return;
-
-        _processCoroutine = StartCoroutine(Process());
     }
 
     protected abstract void OnProcessComplete();
