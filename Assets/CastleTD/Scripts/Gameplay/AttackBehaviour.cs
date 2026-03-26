@@ -31,6 +31,6 @@ public class AttackBehaviour : MonoBehaviour
         {
             _target.TakeDamage(_damageValue);
             yield return delay;
-        } while (_target.CurrentHitPoints > 0);
+        } while (_target != null && _target.CurrentHitPoints > 0);
     }
 }

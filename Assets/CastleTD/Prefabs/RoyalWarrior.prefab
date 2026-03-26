@@ -164,7 +164,7 @@ GameObject:
   - component: {fileID: 3861776215995278263}
   - component: {fileID: 7147887701343590894}
   - component: {fileID: 5702638686124010275}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: RoyalWarrior
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -235,7 +235,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
@@ -251,10 +251,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4aee973867a1c10468b080c1c8b11916, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _unitStats: {fileID: 11400000, guid: 53548498917604446ba5f778b4b9b844, type: 2}
   _targetDetector: {fileID: 29738305687038154}
-  _startMoveTarget: {fileID: 0}
-  _faction: 0
 --- !u!114 &3861776215995278263
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -267,6 +264,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94ac16a77ec5b9442aa4a6dcf5e86952, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _avoidRadius: 2
+  _unitLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  _avoidStrength: 2
 --- !u!114 &7147887701343590894
 MonoBehaviour:
   m_ObjectHideFlags: 0

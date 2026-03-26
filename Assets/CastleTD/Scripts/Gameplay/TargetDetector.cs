@@ -5,7 +5,7 @@ public class TargetDetector : MonoBehaviour
 {
     public event Action<Transform, IDamageable> TargetDetected;
 
-    private void OnTriggerEnter(Collider collider)
+    private void OnTriggerStay(Collider collider)
     {
         if (collider.TryGetComponent(out IDamageable damageable))
         {

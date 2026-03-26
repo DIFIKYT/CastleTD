@@ -98,7 +98,7 @@ GameObject:
   - component: {fileID: 733949453991286992}
   - component: {fileID: 6135095143197327069}
   - component: {fileID: 8855120632740632351}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GoblinWarrior
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -169,7 +169,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
@@ -185,10 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4aee973867a1c10468b080c1c8b11916, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _unitStats: {fileID: 11400000, guid: 909fdd401074fcf45ba8dab221a7613c, type: 2}
   _targetDetector: {fileID: 2091210320146122232}
-  _startMoveTarget: {fileID: 0}
-  _faction: 1
 --- !u!114 &733949453991286992
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,6 +198,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94ac16a77ec5b9442aa4a6dcf5e86952, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _avoidRadius: 2
+  _unitLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  _avoidStrength: 2
 --- !u!114 &6135095143197327069
 MonoBehaviour:
   m_ObjectHideFlags: 0

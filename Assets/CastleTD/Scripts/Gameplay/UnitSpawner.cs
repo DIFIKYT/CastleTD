@@ -15,8 +15,7 @@ public class UnitSpawner : MonoBehaviour
         }
 
         Unit unit = _pools[config.Prefab].Get();
-        unit.transform.position = spawnPoint;
-        unit.transform.rotation = parent.rotation;
+        unit.transform.SetPositionAndRotation(spawnPoint, Quaternion.Euler(0f, parent.rotation.eulerAngles.y, 0f));
         unit.Initialize(config.Prefab, config.Stats, faction, startMoveTarget, startAttackTarget);
         unit.OnSpawn();
         unit.Died += OnDied;
