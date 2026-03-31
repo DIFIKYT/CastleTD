@@ -3,17 +3,22 @@ using UnityEngine;
 
 public class ResourceProductionStructure : Structure
 {
-    [SerializeField] private Resource _resourceType;
+    private const int BaseModifier = 1;
+
+    [SerializeField] private ResourceType _resourceType;
 
     private int _level = 1;
-    private float _resourceModifier = 1f;
+    private int _currentModifier;
 
-    public event Action<Resource, int> ResourceProduced;
+    public event Action<ResourceType, int> ResourceProduced;
+
+    private void Awake()
+    {
+        _currentModifier = BaseModifier;
+    }
 
     protected override void OnProcessComplete()
     {
-        int amount = (int)(_level * _resourceModifier);
-
-        ResourceProduced?.Invoke(_resourceType, amount);
+        ResourceProduced?.Invoke(_resourceType, _level * BaseModifier);
     }
 }

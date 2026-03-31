@@ -33,4 +33,9 @@ public class Health : MonoBehaviour, IDamageable
 
         _currentHitPoints -= value;
     }
+
+    public void Heal(int value)
+    {
+        _currentHitPoints = Math.Min(_currentHitPoints + value, _maxHitPoints);
+    }
 }

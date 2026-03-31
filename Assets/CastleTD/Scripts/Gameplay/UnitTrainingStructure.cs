@@ -5,10 +5,10 @@ public class UnitTrainingStructure : Structure
 {
     [SerializeField] private UnitConfig _unitConfig;
 
-    public event Action<Unit> TrainigCompleted;
+    public event Action<UnitConfig> TrainigCompleted;
 
     protected override void OnProcessComplete()
     {
-        TrainigCompleted?.Invoke(_unitConfig.Prefab);
+        TrainigCompleted?.Invoke(_unitConfig);
     }
 }

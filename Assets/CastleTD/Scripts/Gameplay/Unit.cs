@@ -8,7 +8,6 @@ public class Unit : MonoBehaviour, IFactionMember, ISpawnable
 {
     [SerializeField] private TargetDetector _targetDetector;
 
-    private UnitStats _stats;
     private Faction _faction;
     private AttackBehaviour _attackBehaviour;
     private Health _health;
@@ -23,7 +22,7 @@ public class Unit : MonoBehaviour, IFactionMember, ISpawnable
     public event Action<Unit> Died;
 
     public Faction Faction => _faction;
-    public Unit Prefab { get; private set; }
+    public UnitConfig Config { get; private set; }
 
     private void Awake()
     {
@@ -32,15 +31,14 @@ public class Unit : MonoBehaviour, IFactionMember, ISpawnable
         _health = GetComponent<Health>();
     }
 
-    public void Initialize(Unit prefab, UnitStats stats, Faction faction, Transform startMoveTarget, IDamageable startAttackTarget)
+    public void Initialize(UnitConfig config, Faction faction, Transform startMoveTarget, IDamageable startAttackTarget)
     {
-        _stats = stats;
         _faction = faction;
-        Prefab = prefab;
+        Config = config;
 
-        _mover.Initialize(_stats.MoveSpeed, _stats.RotateSpeed);
-        _attackBehaviour.Initialize(_stats.DamageValue, _stats.AttackInterval);
-        _health.Initialize(_stats.MaxHitPoints);
+        _mover.Initialize(Config.Stats.MoveSpeed, Config.Stats.RotateSpeed);
+        _attackBehaviour.Initialize(Config.Stats.DamageValue, Config.Stats.AttackInterval);
+        _health.Initialize(Config.Stats.MaxHitPoints);
 
         _startMoveTarget = startMoveTarget;
         _startAttackTarget = startAttackTarget;
@@ -64,6 +62,16 @@ public class Unit : MonoBehaviour, IFactionMember, ISpawnable
 
         _targetDetector.TargetDetected -= OnTargetDetected;
         _health.HitPointsOver -= OnHitPointsOver;
+    }
+
+    public void AddDamage(int value)
+    {
+        _attackBehaviour.AddDamage(value);
+    }
+
+    public void Heal(int value)
+    {
+        _health.Heal(value);
     }
 
     private void Update()
@@ -125,7 +133,10 @@ public class Unit : MonoBehaviour, IFactionMember, ISpawnable
         }
 
         if (_attackCoroutine != null)
+        {
             StopCoroutine(_attackCoroutine);
+            _attackBehaviour = null;
+        }
 
         _currentMoveTarget = moveTarget;
         _currentAttackTarget = attackTarget;
@@ -142,7 +153,7 @@ public class Unit : MonoBehaviour, IFactionMember, ISpawnable
     private bool IsTargetInAttackRange()
     {
         float distance = (transform.position - _currentMoveTarget.position).sqrMagnitude;
-        float range = _stats.StoppingDistance * _stats.StoppingDistance;
+        float range = Config.Stats.StoppingDistance * Config.Stats.StoppingDistance;
 
         return distance < range;
     }

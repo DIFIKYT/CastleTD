@@ -1,4 +1,4 @@
-public enum Resource
+public enum ResourceType
 {
     Wood,
     Iron,

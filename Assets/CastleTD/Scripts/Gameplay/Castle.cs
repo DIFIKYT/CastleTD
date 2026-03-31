@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,23 +10,84 @@ public class Castle : MonoBehaviour
     [SerializeField] private Transform _startMoveTarget;
     [SerializeField] private Faction _faction;
 
-    [Header("Units")]
-    [SerializeField] private List<UnitConfig> _configs;
+    [Header("Resources")]
+    [SerializeField] private ResourceStorage _resourceStorage;
 
-    private void Start()
+    [Header("Structures")]
+    [SerializeField] private List<ResourceProductionStructure> _resourceProductionStructures;
+    [SerializeField] private List<BuffStructure> _buffStructures;
+    [SerializeField] private List<UnitTrainingStructure> _unitTrainingStructures;
+
+    [Header("Units")]
+    [SerializeField] private Garrison _garrison;
+
+    public void TakeStructure(Structure structure)
     {
-        StartCoroutine(SpawnCoroutine());
+        switch (structure)
+        {
+            case ResourceProductionStructure:
+                AddResourceProductionStructure(structure);
+                break;
+            case BuffStructure:
+                AddBuffStructure(structure);
+                break;
+            case UnitTrainingStructure:
+                AddUnitTrainingStructure(structure);
+                break;
+        }
     }
 
-    private IEnumerator SpawnCoroutine()
+    private void AddResourceProductionStructure(Structure structure)
     {
-        WaitForSeconds delay = new(_spawnInterval);
+        ResourceProductionStructure newStructure = (ResourceProductionStructure)structure;
+        _resourceProductionStructures.Add(newStructure);
+        newStructure.ResourceProduced += OnResourceProduced;
+    }
 
-        while (true)
-        {
-            _unitSpawner.SpawnUnit(_configs[Random.Range(0, _configs.Count)], _spawnPoints[Random.Range(0, _spawnPoints.Count)], transform, _faction, _startMoveTarget, null);
+    private void AddBuffStructure(Structure structure)
+    {
+        BuffStructure newStructure = (BuffStructure)structure;
+        _buffStructures.Add(newStructure);
+        newStructure.BuffPrepared += OnBlessCompleted;
+    }
 
-            yield return delay;
-        }
+    private void AddUnitTrainingStructure(Structure structure)
+    {
+        UnitTrainingStructure newStructure = (UnitTrainingStructure)structure;
+        _unitTrainingStructures.Add(newStructure);
+        newStructure.TrainigCompleted += OnTrainigCompleted;
+    }
+
+    private void OnResourceProduced(ResourceType resource, int amount)
+    {
+        _resourceStorage.GetResource(resource, amount);
+    }
+
+    private void OnBlessCompleted(BuffType blessing)
+    {
+        //Logic
+    }
+
+    private void OnTrainigCompleted(UnitConfig config)
+    {
+        SpawnUnit(config);
+    }
+
+    private void OnDied(Unit unit)
+    {
+        unit.Died -= OnDied;
+        _garrison.RemoveUnit(unit);
+    }
+
+    private void SpawnUnit(UnitConfig config)
+    {
+        Unit unit = _unitSpawner.SpawnUnit(config, _spawnPoints[Random.Range(0, _spawnPoints.Count)], transform, _faction, _startMoveTarget, null);
+        _garrison.AddUnit(unit);
+        unit.Died += OnDied;
+    }
+
+    private void BuffUnits()
+    {
+
     }
 }
