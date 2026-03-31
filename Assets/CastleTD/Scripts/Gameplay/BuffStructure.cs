@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class BuffStructure : Structure
 {
-    [SerializeField] private BuffType _buff;
+    [SerializeField] private Buff _buff;
 
-    public event Action<BuffType> BuffPrepared;
+    public event Action<Buff> BuffPrepared;
 
     protected override void OnProcessComplete()
     {

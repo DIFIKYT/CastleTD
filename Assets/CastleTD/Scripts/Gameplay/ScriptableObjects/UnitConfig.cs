@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Configs/Unit Config", fileName = "UnitConfig")]
+[CreateAssetMenu(fileName = "New unit config", menuName = "Unit/Configs/Create new unit Config")]
 public class UnitConfig : ScriptableObject
 {
     [SerializeField] private Unit _prefab;

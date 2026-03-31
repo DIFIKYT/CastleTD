@@ -48,7 +48,7 @@ public class Castle : MonoBehaviour
     {
         BuffStructure newStructure = (BuffStructure)structure;
         _buffStructures.Add(newStructure);
-        newStructure.BuffPrepared += OnBlessCompleted;
+        newStructure.BuffPrepared += OnBuffPrepared;
     }
 
     private void AddUnitTrainingStructure(Structure structure)
@@ -63,9 +63,9 @@ public class Castle : MonoBehaviour
         _resourceStorage.GetResource(resource, amount);
     }
 
-    private void OnBlessCompleted(BuffType blessing)
+    private void OnBuffPrepared(Buff buff)
     {
-        //Logic
+        BuffUnits(buff);
     }
 
     private void OnTrainigCompleted(UnitConfig config)
@@ -86,8 +86,9 @@ public class Castle : MonoBehaviour
         unit.Died += OnDied;
     }
 
-    private void BuffUnits()
+    private void BuffUnits(Buff buff)
     {
-
+        foreach (Unit unit in _garrison.ActiveUnits)
+            unit.TakeBuff(buff);
     }
 }

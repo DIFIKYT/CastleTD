@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New unit", menuName = "Unit/Create new unit")]
+[CreateAssetMenu(fileName = "New unit", menuName = "Unit/Stats/Create new unit")]
 public class UnitStats : ScriptableObject
 {
     [SerializeField] private float _moveSpeed;

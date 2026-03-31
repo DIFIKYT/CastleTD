@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Mover))]
@@ -18,6 +19,7 @@ public class Unit : MonoBehaviour, IFactionMember, ISpawnable
     private IDamageable _currentAttackTarget;
     private UnitState _state;
     private Coroutine _attackCoroutine;
+    private List<Buff> _currentBuffs = new();
 
     public event Action<Unit> Died;
 
@@ -72,6 +74,12 @@ public class Unit : MonoBehaviour, IFactionMember, ISpawnable
     public void Heal(int value)
     {
         _health.Heal(value);
+    }
+
+    public void TakeBuff(Buff buff)
+    {
+        _currentBuffs.Add(buff);
+        buff.Apply(this);
     }
 
     private void Update()

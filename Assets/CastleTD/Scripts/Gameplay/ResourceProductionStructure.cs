@@ -19,6 +19,6 @@ public class ResourceProductionStructure : Structure
 
     protected override void OnProcessComplete()
     {
-        ResourceProduced?.Invoke(_resourceType, _level * BaseModifier);
+        ResourceProduced?.Invoke(_resourceType, _level * _currentModifier);
     }
 }
