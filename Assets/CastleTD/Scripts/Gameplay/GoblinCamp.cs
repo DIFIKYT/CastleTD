@@ -13,21 +13,4 @@ public class GoblinCamp : MonoBehaviour
 
     [Header("Units")]
     [SerializeField] private List<UnitConfig> _configs;
-
-    private void Start()
-    {
-        StartCoroutine(SpawnCoroutine());
-    }
-
-    private IEnumerator SpawnCoroutine()
-    {
-        WaitForSeconds delay = new(_spawnInterval);
-
-        while (true)
-        {
-            _unitSpawner.SpawnUnit(_configs[Random.Range(0, _configs.Count)], _spawnPoints[Random.Range(0, _spawnPoints.Count)], transform, _faction, _startMoveTarget, null);
-
-            yield return delay;
-        }
-    }
 }

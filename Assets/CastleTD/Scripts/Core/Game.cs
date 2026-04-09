@@ -23,7 +23,7 @@ public class Game : MonoBehaviour
 
     public void SetState(GameState newState)
     {
-        if(_currentState == newState)
+        if (_currentState == newState)
             return;
 
         _currentState = newState;

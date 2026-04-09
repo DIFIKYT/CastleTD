@@ -2086,9 +2086,11 @@ MonoBehaviour:
   _spawnInterval: 3
   _startMoveTarget: {fileID: 1287484027}
   _faction: 0
-  _configs:
-  - {fileID: 11400000, guid: d9d97e0be8aca8441913ccc81a9bec31, type: 2}
-  - {fileID: 11400000, guid: 7f3e9a71c137f1346ac733002ff36b9b, type: 2}
+  _resourceStorage: {fileID: 0}
+  _resourceProductionStructures: []
+  _buffStructures: []
+  _unitTrainingStructures: []
+  _garrison: {fileID: 0}
 --- !u!1 &914177091
 GameObject:
   m_ObjectHideFlags: 0
